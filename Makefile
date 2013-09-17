@@ -1,15 +1,18 @@
-.PHONY: build clean rebuild
+.PHONY: build clean debug rebuild
 
 CC = gcc
-FILES = src/*.c 
+FILES = Game.c Item.c Dictionary.c 
 OUT_EXE = bin/Zuul
 FLAGS = -Wall -ansi
+SRC = $(addprefix src/, $(FILES))
 
-build:	$(FILES)
-	$(CC) $(FLAGS) $(FILES) -o $(OUT_EXE)
+build:	$(SRC)
+	$(CC) $(FLAGS) $(SRC) -o $(OUT_EXE)
 
-clean:	
+clean:
 	-rm -f *.o $(OUT_EXE)
 
-rebuild:
-	clean build
+debug:
+	$(CC) -g $(FLAGS) $(SRC) -o $(OUT_EXE)
+
+rebuild: clean build

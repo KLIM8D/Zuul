@@ -1,10 +1,10 @@
 #ifndef ROOM_H_INCLUDED
 #define ROOM_H_INCLUDED
-#include "Monster.h";
+#include "Monster.h"
 typedef struct room {
     char *name;
     char *description;
-    Monster *monster;
+    struct monster *monster;
     struct room *nextRoom;
 }room;
 

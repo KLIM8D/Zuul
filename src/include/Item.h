@@ -7,5 +7,6 @@ typedef struct item {
     long damage;
 }item;
 
-char *getItemDesc(void);
+char *getItemDesc(item *itemp);
+item *createItem(int i);
 #endif
