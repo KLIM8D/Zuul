@@ -1,11 +1,11 @@
 #ifndef MONSTER_H_INCLUDED
 #define MONSTER_H_INCLUDED
 #include "Item.h"
-#define INVENTORY_SPACE 10
+#define MONSTER_ITEMS 10
 typedef struct monster {
     int id;
     char *name;
-    struct item items[INVENTORY_SPACE];
+    struct item items[MONSTER_ITEMS];
     long damage;
     long health;
 }monster;

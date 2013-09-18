@@ -1,6 +1,7 @@
 #ifndef PLAYER_H_INCLUDED
 #define PLAYER_H_INCLUDED
-#include "Item.h";
+#include "Item.h"
+#include "Monster.h"
 #define INVENTORY_SPACE 250
 typedef struct player {
     char *name;
@@ -8,12 +9,12 @@ typedef struct player {
     long maxExperience;
     long healthPoints;
     long level;
-    Item weapon;
-    Item inventory[INVENTORY_SPACE];
+    item *weapon;
+    long armor;
+    item inventory[INVENTORY_SPACE];
 }player;
 
-void calcExp(long gain);
-long getHealth(void);
-long hit(long damage);
+long calcExp(player *playerp,long gain);
+long takeDmg(player *playerp, monster *monsterp);
 long attack(void);
 #endif

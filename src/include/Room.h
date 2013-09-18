@@ -8,4 +8,5 @@ typedef struct room {
     struct room *nextRoom;
 }room;
 
+room *createRooms(void);
 #endif

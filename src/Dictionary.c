@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+static struct nlist *hashtab[HASHSIZE];  /*pointer table */
+
 /* install: put (name, defn) in hashtab */
 struct nlist *install(char *name, listItem *_item)
 {

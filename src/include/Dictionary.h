@@ -19,8 +19,6 @@ struct nlist {
     listItem *_obj;
 };
 
-static struct nlist *hashtab[HASHSIZE]; /* pointer table */
-
 unsigned hash(char *s);
 struct nlist *lookup(char *s);
 struct nlist *install(char *name, listItem *_item);

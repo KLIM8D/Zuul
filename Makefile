@@ -1,7 +1,7 @@
 .PHONY: build clean debug rebuild
 
 CC = gcc
-FILES = Game.c Item.c Dictionary.c 
+FILES = Game.c Item.c Dictionary.c Command.c Player.c Room.c 
 OUT_EXE = bin/Zuul
 FLAGS = -Wall -ansi
 SRC = $(addprefix src/, $(FILES))
