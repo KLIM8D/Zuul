@@ -1,24 +1,38 @@
 #include "include/Command.h"
+#include "include/Dictionary.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <ctype.h>
 
-char *commands[] = {"go", "help", "quit", "rooms"};
-#define NELEMENTS sizeof(commands) / sizeof(commands[0])
+char **commands;
+#define NELEMENTS 4
+
+void initCommands(void)
+{
+    commands = malloc(NELEMENTS * sizeof(char*));
+    commands[0] = "go";
+    commands[1] = "help";
+    commands[2] = "quit";
+    commands[3] = "rooms";
+}
 
 int processCommand(command *cmd, room **roomp)
 {
-    char *word = cmd->firstWord;
-
-    if (strcmp(word, "help") == 0)
-        printHelp();
-    else if(strcmp(word,"go") == 0) {
-        goRoom(roomp);
-        printf("%s\n", (*roomp)->name);
+    if(cmd->firstWord == NULL) {
+        putchar('\n');
+        return 0;
     }
-    else if(strcmp(word, "rooms") == 0)
+
+    if (strcmp(cmd->firstWord, "help") == 0)
+        printHelp();
+    else if(strcmp(cmd->firstWord,"go") == 0) {
+        goRoom(roomp, cmd->secondWord);
+        printf("Current room: %s\n", (*roomp)->name);
+    }
+    else if(strcmp(cmd->firstWord, "rooms") == 0)
         printRoomExists(*roomp);
-    else if (strcmp(word, "quit") == 0)
+    else if (strcmp(cmd->firstWord, "quit") == 0)
         return 0;
     else {
         printf("Unknown command\n");
@@ -38,18 +52,16 @@ void printHelp(void)
         printf("%s\n", commands[i]);
 }
 
-struct command *getCommand(command *cmd)
+struct command *getCommand(char *line, command *cmd)
 {
-    char line[100];
     int maxLine = 100;
     char spacer[] = " ";
-    printf("C: ");
+    printf("\ncmd: ");
     getLine(line, maxLine);
 
     cmd->firstWord = strtok(line, spacer);
     cmd->secondWord = strtok(NULL, spacer);
 
-    /*free(line);*/
     return cmd;
 }
 
@@ -61,22 +73,76 @@ int getLine(char *s, int limit)
     i = 0;
     while (--limit && (c = getchar()) != EOF && c != '\n')
         s[i++] = c;
-    
-    /*if(c == '\n')
-        s[i++] = c;*/
+
     s[i] = '\0';
 
     return i;
 }
 
-void goRoom(room **roomp)
+void goRoom(room **roomp, char *secondWord)
 {
-    *roomp = (*roomp)->nextRoom;
-    printf("Current room: %s\n", (*roomp)->name);
+    int i = getDirectionIndex(secondWord);
+    if(i >= 0) {
+        if(((*roomp)->nextRoom[i]) != NULL)
+            **roomp = *((*roomp)->nextRoom[i]);
+        else
+            printf("No door to the %s\n", secondWord);
+    }
+    else
+        printf("Unknown room\n");
 }
 
 void printRoomExists(room *roomp)
 {
     printf("Exits:\n");
-    printf("%s\n", roomp->nextRoom->name);
+    int i;
+    for(i = 0; i < 4; ++i)
+        if(roomp->nextRoom[i] != NULL)
+            printf("%s: %s\n", getDirection(i), roomp->nextRoom[i]->name);
 }
+
+char *getDirection(int i)
+{
+    switch(i) {
+        case 0:
+            return "East";
+        case 1:
+            return "North";
+        case 2:
+            return "West";
+        case 3:
+            return "South";
+        default:
+            return "Unknown";
+    }
+}
+
+int getDirectionIndex(char *src)
+{
+    char *word = strtolower(src);
+    if(strncmp(word, "east", 4) == 0)
+        return 0;
+    else if(strncmp(word, "north", 5) == 0)
+        return 1;
+    else if(strncmp(word, "west", 4) == 0)
+        return 2;
+    else if(strncmp(word, "south", 5) == 0)
+        return 3;
+    else
+        return -1;
+}
+
+char *strtolower(char *str)
+{
+    int i;
+    for(i = 0; str[i]; ++i)
+        str[i] = tolower(str[i]);
+
+    return str;
+}
+
+void cleanUpCmds(void)
+{
+    free(commands);
+}
+

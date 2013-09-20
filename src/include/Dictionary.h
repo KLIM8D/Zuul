@@ -16,12 +16,15 @@ typedef union {
 struct nlist { 
     struct nlist *next; /* next entry in chain */
     char *name; /* defined name */
+    int type;
     listItem *_obj;
-};
+}nlist;
 
 unsigned hash(char *s);
 struct nlist *lookup(char *s);
-struct nlist *install(char *name, listItem *_item);
+struct nlist *install(char *name, listItem *_item, int type);
 struct nlist *undef(char *name);
 char *strdupl(char *);
+void init(void);
+void cleanup(void);
 #endif

@@ -9,17 +9,21 @@
 #define NITEMS 1
 
 static struct player *playerp;
-static struct room *currentRoom;
 
 int main()
 {
+    init();
+    initCommands();
     struct nlist *i;
+    char *p;
     createItems();
     i = lookup("Crazy axe");
     if (i != NULL)
-        printf("%s\n", getItemDesc(i->_obj->_item));
+        printf("%s\n", (p = getItemDesc(i->_obj->_item)));
     else
         printf("Not found\n");
+
+    free(p);
 
     play();
 
@@ -31,11 +35,11 @@ void createItems(void)
     int i;
     listItem *itemp;
     for(i = 0; i < NITEMS; ++i) {
-       itemp = (listItem *) malloc (sizeof(listItem));
+       itemp = malloc(sizeof(*itemp));
 
        itemp->_item = createItem(i);
 
-       install(itemp->_item->name, itemp);
+       install(itemp->_item->name, itemp, 0);
     }
 }
 
@@ -49,34 +53,35 @@ void printWelcome(void)
     printf("Write your name: ");
     scanf("%49s", name);
     getchar();
-    createPlayer(name);
-}
-
-void createPlayer(char *name)
-{
-    playerp = (player *) malloc (sizeof(player));
-    playerp->name = name;
-    playerp->experience = 0;
-    playerp->maxExperience = 100;
-    playerp->healthPoints = 100;
-    playerp->level = 1;
-    playerp->weapon = lookup("Crazy axe")->_obj->_item;
-
+    playerp = createPlayer(name);
     printf("Let's get started, %s!\n", playerp->name); 
 }
 
 void play(void)
 {
     printWelcome();
+    struct room *currentRoom;
     currentRoom = createRooms();
-    int running = 0;
     struct command *cmdp;
-    cmdp = (command *) malloc(sizeof(command));
-
-    getCommand(cmdp);
-    while((running = processCommand(cmdp, &currentRoom))) {
-        getCommand(cmdp);
+    cmdp = calloc(2, sizeof(command));
+    char *line = calloc(50, sizeof(char));
+    
+    getCommand(line, cmdp);
+    while(processCommand(cmdp, &currentRoom)) {
+        getCommand(line, cmdp);
     }
 
-    printf("lolll\n");
+    cleanup();
+    if(cmdp->firstWord == NULL)
+        free(line);
+
+    free(cmdp->firstWord);
+    free(cmdp->secondWord);
+    free(cmdp);
+
+    free(playerp->name);
+    free(playerp->inventory);
+    free(playerp);
+
+    cleanUpCmds();
 }

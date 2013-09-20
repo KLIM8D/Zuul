@@ -4,7 +4,7 @@ typedef struct item {
     char *name;
     char *type;
     char *rareness;
-    long damage;
+    long *damage;
 }item;
 
 char *getItemDesc(item *itemp);

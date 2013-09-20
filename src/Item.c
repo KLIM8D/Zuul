@@ -1,4 +1,5 @@
 #include "include/Item.h"
+#include "include/Dictionary.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -6,77 +7,86 @@
 
 char *getItemDesc(item *itemp)
 {
-    char description[1000];
-    char *p = description;
-    sprintf(description, "Name: %s\nType: %s\nRare: %s\nDamage: %ld", itemp->name, itemp->type, itemp->rareness, itemp->damage);
+    char *description = malloc(1000);
+    sprintf(description, "Name: %s\nType: %s\nRare: %s\nDamage: %ld", itemp->name, itemp->type, itemp->rareness, *(itemp->damage));
 
-    return p;
+    return description;
 }
 
 item *createItem(int i)
 {
-    item *itemp;
-    itemp = (item *) malloc (sizeof(item));
+    item *itemp = malloc(sizeof(*itemp));
+    long *dmgp = malloc(sizeof(long));
     switch(i) {
         case 0:
-            itemp->name = "Crazy axe";
-            itemp->type = "Axe";
-            itemp->rareness = "Uncommon";
-            itemp->damage = 7;
+            itemp->name = strdupl("Crazy axe");
+            itemp->type = strdupl("Axe");
+            itemp->rareness = strdupl("Uncommon");
+            *dmgp = 7;
+            itemp->damage = dmgp;
             break;
         case 1:
-            itemp->name = "Awesome spear";
-            itemp->type = "Spear";
-            itemp->rareness = "Rare";
-            itemp->damage = 12;
+            itemp->name = strdupl("Awesome spear");
+            itemp->type = strdupl("Spear");
+            itemp->rareness = strdupl("Rare");
+            *dmgp = 12;
+            itemp->damage = dmgp;  
             break;
         case 2:
-            itemp->name = "Abandoned Greatsword";
-            itemp->type = "Sword";
-            itemp->rareness = "Uncommon";
-            itemp->damage = 10;
+            itemp->name = strdupl("Abandoned Greatsword");
+            itemp->type = strdupl("Sword");
+            itemp->rareness = strdupl("Uncommon");
+            *dmgp = 10;
+            itemp->damage = dmgp;
             break;
         case 3:
-            itemp->name = "Chipped Timber Axe";
-            itemp->type = "Axe";
-            itemp->rareness = "Common";
-            itemp->damage = 4;
+            itemp->name = strdupl("Chipped Timber Axe");
+            itemp->type = strdupl("Axe");
+            itemp->rareness = strdupl("Common");
+            *dmgp = 4;
+            itemp->damage = dmgp;
             break;
         case 4:
-            itemp->name = "Shattered Bow";
-            itemp->type = "Bow";
-            itemp->rareness = "Rare";
-            itemp->damage = 12;
+            itemp->name = strdupl("Shattered Bow");
+            itemp->type = strdupl("Bow");
+            itemp->rareness = strdupl("Rare");
+            *dmgp = 12;
+            itemp->damage = dmgp;
             break;
         case 5:
-            itemp->name = "Dulled Shiv";
-            itemp->type = "Knife";
-            itemp->rareness = "Epic";
-            itemp->damage = 20;
+            itemp->name = strdupl("Dulled Shiv");
+            itemp->type = strdupl("Knife");
+            itemp->rareness = strdupl("Epic");
+            *dmgp = 20;
+            itemp->damage = dmgp;
             break;
         case 6:
-            itemp->name = "Stormhammer Head";
-            itemp->type = "Hammer";
-            itemp->rareness = "Epic";
-            itemp->damage = 25;
+            itemp->name = strdupl("Stormhammer Head");
+            itemp->type = strdupl("Hammer");
+            itemp->rareness = strdupl("Epic");
+            *dmgp = 25;
+            itemp->damage = dmgp;
             break;
         case 7:
-            itemp->name = "Flamewashed Mace";
-            itemp->type = "Mace";
-            itemp->rareness = "Uncommon";
-            itemp->damage = 12;
+            itemp->name = strdupl("Flamewashed Mace");
+            itemp->type = strdupl("Mace");
+            itemp->rareness = strdupl("Uncommon");
+            *dmgp = 12;
+            itemp->damage = dmgp;
             break;
         case 8:
-            itemp->name = "Ice Cleaver";
-            itemp->type = "Axe";
-            itemp->rareness = "Uncommon";
-            itemp->damage = 14;
+            itemp->name = strdupl("Ice Cleaver");
+            itemp->type = strdupl("Axe");
+            itemp->rareness = strdupl("Uncommon");
+            *dmgp = 14;
+            itemp->damage = dmgp;
             break;
         default:
-            itemp->name = "Great Axe";
-            itemp->type = "Axe";
-            itemp->rareness = "Uncommon";
-            itemp->damage = 6;
+            itemp->name = strdupl("Great Axe");
+            itemp->type = strdupl("Axe");
+            itemp->rareness = strdupl("Uncommon");
+            *dmgp = 6;
+            itemp->damage = dmgp;
             break;
     }
 

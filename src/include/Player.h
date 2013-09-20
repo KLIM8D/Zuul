@@ -11,10 +11,11 @@ typedef struct player {
     long level;
     item *weapon;
     long armor;
-    item inventory[INVENTORY_SPACE];
+    item **inventory;
 }player;
 
 long calcExp(player *playerp,long gain);
 long takeDmg(player *playerp, monster *monsterp);
 long attack(void);
+player *createPlayer(char *name);
 #endif
